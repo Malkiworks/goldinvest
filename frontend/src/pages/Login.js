@@ -61,27 +61,8 @@ const Login = () => {
     setLoading(true);
     
     try {
-      // In a real app, this would call your backend API
-      // For demonstration purposes, we'll simulate a successful login
-      // const response = await axios.post('/api/auth/login', formData);
-      
-      // Simulate API response for demo purposes
-      const mockResponse = {
-        status: 200,
-        data: {
-          user: {
-            id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: formData.email,
-            role: 'user'
-          },
-          token: 'mock-jwt-token'
-        }
-      };
-      
-      // Call the login method from AuthContext to update app state
-      login(mockResponse.data.user, mockResponse.data.token);
+      // Call the login method from AuthContext with email and password
+      await login(formData.email, formData.password);
       
       toast.success('Login successful!');
       navigate('/dashboard');

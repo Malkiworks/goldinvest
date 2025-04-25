@@ -75,6 +75,9 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       
+      // Clear any previous auth headers
+      delete axios.defaults.headers.common['Authorization'];
+      
       const res = await axios.post('/api/auth/login', { email, password });
       
       if (res.data.success) {
@@ -86,10 +89,11 @@ export const AuthProvider = ({ children }) => {
         
         // Set auth token header
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+        
+        return res.data;
       }
-      
-      return res.data;
     } catch (err) {
+      console.error('Login error:', err);
       setError(
         err.response?.data?.message || 'Login failed. Please check your credentials.'
       );

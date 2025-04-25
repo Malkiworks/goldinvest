@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Pages
 import Home from './pages/Home';
@@ -17,6 +19,7 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
+        <ToastContainer position="top-right" autoClose={5000} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />

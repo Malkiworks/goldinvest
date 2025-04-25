@@ -102,14 +102,18 @@ const Register = () => {
     setLoading(true);
     
     try {
-      // In a real app, this would call your backend API
-      // const response = await axios.post('/api/auth/register', formData);
+      // Call the backend API to register the user
+      const response = await axios.post('/api/auth/register', {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password
+      });
       
-      // Simulate successful registration
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success('Registration successful! Please check your email to verify your account.');
-      navigate('/login');
+      if (response.data.success) {
+        toast.success('Registration successful! Please log in with your credentials.');
+        navigate('/login');
+      }
     } catch (error) {
       console.error('Registration error:', error);
       

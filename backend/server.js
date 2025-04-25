@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
 const path = require('path');
+const connectDB = require('./config/db');
 
 // Load env vars
 dotenv.config();
@@ -11,14 +11,22 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json());
 
-// Database connection
-mongoose
-  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/goldInvest')
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// Connect to MongoDB
+connectDB()
+  .then(() => {
+    console.log('MongoDB Connected');
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
