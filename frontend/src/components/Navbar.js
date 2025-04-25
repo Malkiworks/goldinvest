@@ -51,6 +51,14 @@ const Navbar = () => {
                     </Link>
                   </li>
                 )}
+                {user?.role === 'admin' && (
+                  <li className="nav-item">
+                    <Link to="/admin" className="nav-link">
+                      <i className="fas fa-user-shield me-1"></i>
+                      Admin Dashboard
+                    </Link>
+                  </li>
+                )}
               </ul>
               <div className="d-flex">
                 <span className="navbar-text me-3">

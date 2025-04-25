@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import KycVerification from './pages/KycVerification';
 import Investment from './pages/Investment';
+import AdminDashboard from './pages/AdminDashboard';
 import NotFound from './pages/NotFound';
 
 const App = () => {
@@ -46,6 +47,12 @@ const App = () => {
           <Route path="/investments/:id" element={
             <PrivateRoute>
               <Investment />
+            </PrivateRoute>
+          } />
+          
+          <Route path="/admin" element={
+            <PrivateRoute>
+              <AdminDashboard />
             </PrivateRoute>
           } />
           

@@ -412,6 +412,13 @@ const KycVerification = () => {
                       Your previous KYC verification was rejected. Reason: {user?.kycDocuments?.rejectionReason || 'Please contact support for details.'}
                     </div>
                   </div>
+                ) : user?.kycStatus === 'resubmission_requested' ? (
+                  <div className="mb-4">
+                    <div className="alert alert-warning" role="alert">
+                      <i className="fas fa-exclamation-circle me-2"></i>
+                      <strong>Resubmission Requested:</strong> {user?.kycDocuments?.resubmissionMessage || 'Please update your KYC documents and resubmit.'}
+                    </div>
+                  </div>
                 ) : null}
                 
                 {error && (
@@ -427,7 +434,7 @@ const KycVerification = () => {
                   </div>
                 )}
                 
-                {(user?.kycStatus !== 'pending' || user?.kycStatus === 'rejected') && (
+                {(user?.kycStatus !== 'pending' || user?.kycStatus === 'rejected' || user?.kycStatus === 'resubmission_requested') && (
                   <div className="mb-4">
                     <div className="progress" style={{ height: '2px' }}>
                       <div
@@ -447,7 +454,7 @@ const KycVerification = () => {
                   </div>
                 )}
                 
-                {(user?.kycStatus !== 'pending' || user?.kycStatus === 'rejected') && (
+                {(user?.kycStatus !== 'pending' || user?.kycStatus === 'rejected' || user?.kycStatus === 'resubmission_requested') && (
                   <form onSubmit={handleSubmit}>
                     {renderStepContent()}
                   </form>

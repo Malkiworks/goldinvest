@@ -62,10 +62,18 @@ const Login = () => {
     
     try {
       // Call the login method from AuthContext with email and password
-      await login(formData.email, formData.password);
+      const result = await login(formData.email, formData.password);
       
-      toast.success('Login successful!');
-      navigate('/dashboard');
+      if (result && result.success) {
+        toast.success('Login successful!');
+        
+        // Redirect based on user role
+        if (result.user && result.user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
+      }
     } catch (error) {
       console.error('Login error:', error);
       

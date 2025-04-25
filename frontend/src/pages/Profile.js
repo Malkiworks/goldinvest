@@ -342,6 +342,35 @@ const Profile = () => {
                             </div>
                           </div>
                         </div>
+                      ) : user?.kycStatus === 'resubmission_requested' ? (
+                        <div className="alert alert-warning" role="alert">
+                          <div className="d-flex align-items-center">
+                            <div className="me-3">
+                              <i className="fas fa-exclamation-circle fa-2x"></i>
+                            </div>
+                            <div>
+                              <h6 className="mb-1">Resubmission Requested</h6>
+                              <p className="mb-0">
+                                <strong>Message from the verification team:</strong><br />
+                                {user?.kycDocuments?.resubmissionMessage || 'Please update and resubmit your KYC documents.'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : user?.kycStatus === 'rejected' ? (
+                        <div className="alert alert-danger" role="alert">
+                          <div className="d-flex align-items-center">
+                            <div className="me-3">
+                              <i className="fas fa-exclamation-triangle fa-2x"></i>
+                            </div>
+                            <div>
+                              <h6 className="mb-1">Verification Rejected</h6>
+                              <p className="mb-0">
+                                <strong>Reason:</strong> {user?.kycDocuments?.rejectionReason || 'Please contact support for details.'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       ) : (
                         <div className="alert alert-danger" role="alert">
                           <div className="d-flex align-items-center">
@@ -351,10 +380,7 @@ const Profile = () => {
                             <div>
                               <h6 className="mb-1">Verification Required</h6>
                               <p className="mb-0">
-                                {user?.kycStatus === 'rejected' 
-                                  ? `Your verification was rejected. Reason: ${user?.kycDocuments?.rejectionReason || 'Please contact support for details.'}`
-                                  : 'Complete KYC verification to start investing in gold.'
-                                }
+                                Complete KYC verification to start investing in gold.
                               </p>
                             </div>
                           </div>
@@ -362,10 +388,39 @@ const Profile = () => {
                       )}
                     </div>
                     
-                    {user?.kycStatus !== 'approved' && (
+                    {/* KYC submission benefits */}
+                    <div className="card bg-dark border-warning mb-4">
+                      <div className="card-header bg-dark border-warning">
+                        <h6 className="mb-0 text-warning">Why KYC Verification?</h6>
+                      </div>
+                      <div className="card-body">
+                        <ul className="list-group list-group-flush bg-dark">
+                          <li className="list-group-item bg-dark text-white border-warning">
+                            <i className="fas fa-shield-alt text-warning me-2"></i>
+                            Protects against fraud and identity theft
+                          </li>
+                          <li className="list-group-item bg-dark text-white border-warning">
+                            <i className="fas fa-unlock text-warning me-2"></i>
+                            Unlocks all investment features
+                          </li>
+                          <li className="list-group-item bg-dark text-white border-warning">
+                            <i className="fas fa-coins text-warning me-2"></i>
+                            Required by regulations for all gold investments
+                          </li>
+                          <li className="list-group-item bg-dark text-white border-warning">
+                            <i className="fas fa-hand-holding-usd text-warning me-2"></i>
+                            Enables withdrawals and transfers
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {user?.kycStatus !== 'approved' && user?.kycStatus !== 'pending' && (
                       <div className="text-center">
                         <Link to="/kyc" className="btn btn-warning">
-                          {user?.kycStatus === 'rejected' ? 'Resubmit KYC' : 'Complete KYC Verification'}
+                          {user?.kycStatus === 'rejected' || user?.kycStatus === 'resubmission_requested' 
+                            ? 'Resubmit KYC Documents' 
+                            : 'Complete KYC Verification'}
                         </Link>
                       </div>
                     )}

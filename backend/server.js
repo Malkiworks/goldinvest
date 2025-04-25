@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const multer = require('multer');
 const connectDB = require('./config/db');
+const fs = require('fs');
 
 // Load env vars
 dotenv.config();
@@ -18,6 +20,33 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// File Upload Middleware
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    // Create directory if it doesn't exist
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    const userDir = path.join(uploadDir, 'kyc', req.user?.id?.toString() || 'temp');
+    if (!fs.existsSync(userDir)) {
+      fs.mkdirSync(userDir, { recursive: true });
+    }
+    cb(null, userDir);
+  },
+  filename: function(req, file, cb) {
+    // Use original filename but sanitize it
+    const fileExt = path.extname(file.originalname);
+    const fileName = file.fieldname;
+    cb(null, `${fileName}${fileExt}`);
+  }
+});
+
+const upload = multer({ storage });
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Connect to MongoDB
 connectDB()
   .then(() => {
@@ -32,6 +61,8 @@ connectDB()
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/investments', require('./routes/investments'));
 app.use('/api/gold', require('./routes/gold'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/admin', require('./routes/admin'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

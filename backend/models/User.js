@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
   },
   kycStatus: {
     type: String,
-    enum: ['not_submitted', 'pending', 'approved', 'rejected'],
+    enum: ['not_submitted', 'pending', 'approved', 'rejected', 'resubmission_requested'],
     default: 'not_submitted'
   },
   kycDocuments: {
@@ -57,6 +57,7 @@ const userSchema = new mongoose.Schema({
     addressProof: String,
     selfie: String,
     rejectionReason: String,
+    resubmissionMessage: String,
     reviewedBy: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'User' 
